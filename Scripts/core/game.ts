@@ -6,9 +6,9 @@ MAIN GAME FILE
 Source file	name:       game.ts
 Author’s name:	        George Savcheko
 Last modified by:       George Savchenko
-Date last modified:     2016-02-01
+Date last modified:     2016-02-02
 Program	description:    Display a cube like humanoid character
-Revision history:       initial commit
+Revision history:       basic body shape added
 
 THREEJS Aliases
 */ 
@@ -44,6 +44,15 @@ var renderer: Renderer;
 var camera: PerspectiveCamera;
 var axes: AxisHelper;
 var cube: Mesh;
+var head;
+var cubeMaterial;
+var leftLeg;
+var rightLeg;
+var lowerTorso;
+var body;
+var leftArm;
+var rightArm;
+var lamberMaterial;
 var plane: Mesh;
 var sphere: Mesh;
 var ambientLight: AmbientLight;
@@ -95,9 +104,74 @@ function init() {
     scene.add(spotLight);
     console.log("Added a SpotLight Light to Scene");
     
-    // Call the Custom Mesh function
-    initializeCustomMesh();
+    //Make cube man
+    // right leg
+    rightLeg = new CubeGeometry(1, 10, 1);
+    cubeMaterial = new LambertMaterial({color: 0x113572});
+    cube = new Mesh(rightLeg, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = -2;
+    scene.add(cube);
     
+    //Right leg
+    leftLeg = new CubeGeometry(1, 10, 1);
+    cubeMaterial = new LambertMaterial({color: 0x113572});
+    cube = new Mesh(leftLeg, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = 2;
+    scene.add(cube);
+    
+    //Body
+    body = new CubeGeometry(5, 6, 1);
+    cubeMaterial = new LambertMaterial({color: 0xff4c4c});
+    cube = new Mesh(body, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = 0;
+    cube.position.y = 10;
+    scene.add(cube);
+    
+    //Lower Torso
+    lowerTorso = new CubeGeometry(5, 2, 1);
+    cubeMaterial = new LambertMaterial({color: 0x113572});
+    cube = new Mesh(lowerTorso, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = 0;
+    cube.position.y = 6;
+    scene.add(cube);
+    
+    //left arm
+    leftArm = new CubeGeometry(6, 1, 1);
+    cubeMaterial = new LambertMaterial({color: 0xff4c4c});
+    cube = new Mesh(leftArm, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = 5;
+    cube.position.y = 12;
+    scene.add(cube);
+    
+    //right arm
+    rightArm = new CubeGeometry(6, 1, 1);
+    cubeMaterial = new LambertMaterial({color: 0xff4c4c});
+    cube = new Mesh(rightArm, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = -5;
+    cube.position.y = 12;
+    scene.add(cube);
+    
+    //Head
+    head = new CubeGeometry(3, 3, 2);
+    cubeMaterial = new LambertMaterial({color: 0xfae7d0});
+    cube = new Mesh(head, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.x = 0;
+    cube.position.y = 14.5;
+    scene.add(cube);
     
     // add controls
     gui = new GUI();
@@ -115,37 +189,7 @@ function init() {
     window.addEventListener('resize', onResize, false);
 }
 
-function initializeCustomMesh(): void {
-    vertices = [
-        new THREE.Vector3(1, 3, 1),
-        new THREE.Vector3(1, 3, -1),
-        new THREE.Vector3(1, -1, 1),
-        new THREE.Vector3(1, -1, -1),
-        new THREE.Vector3(-1, 3, -1),
-        new THREE.Vector3(-1, 3, 1),
-        new THREE.Vector3(-1, -1, -1),
-        new THREE.Vector3(-1, -1, 1)
-    ];
 
-    faces = [
-        new THREE.Face3(0, 2, 1),
-        new THREE.Face3(2, 3, 1),
-        new THREE.Face3(4, 6, 5),
-        new THREE.Face3(6, 7, 5),
-        new THREE.Face3(4, 5, 1),
-        new THREE.Face3(5, 0, 1),
-        new THREE.Face3(7, 6, 2),
-        new THREE.Face3(6, 3, 2),
-        new THREE.Face3(5, 7, 0),
-        new THREE.Face3(7, 2, 0),
-        new THREE.Face3(1, 3, 4),
-        new THREE.Face3(3, 6, 4),
-    ];
-
-    createCustomMesh();
-
-    console.log("Added Custom Mesh to Scene");
-}
 
 function addControlPoints(): void {
     control.points.push(new Point(3, 5, 3));
