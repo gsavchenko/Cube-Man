@@ -8,7 +8,7 @@ Author’s name:	        George Savcheko
 Last modified by:       George Savchenko
 Date last modified:     2016-02-03
 Program	description:    Display a cube like humanoid character
-Revision history:       Added functionality for rotation on one axis
+Revision history:       added rotation on all axises
 
 THREEJS Aliases
 */ 
@@ -58,7 +58,9 @@ var plane: Mesh;
 var sphere: Mesh;
 var ambientLight: AmbientLight;
 var spotLight: SpotLight;
-var control: Control;
+var controlx: Control;
+var controly: Control;
+var controlz: Control;
 var gui: GUI;
 var stats: Stats;
 var step: number = 0;
@@ -179,8 +181,12 @@ function init() {
         
     // add controls
     gui = new GUI();
-    control = new Control(0.00);
-    addControl(control);
+    controlx = new Control(0.00);
+    controly = new Control(0.00);
+    controlz = new Control(0.00);
+    addControl(controlx);
+    addControl(controly);
+    addControl(controlz);
 
     // Add framerate stats
     addStatsObject();
@@ -236,7 +242,9 @@ function addStatsObject() {
 function gameLoop(): void {
     stats.update();
 
-    body.rotation.y += control.rotationSpeed;
+    body.rotation.x += controlx.rotationSpeed;
+    body.rotation.y += controly.rotationSpeed;
+    body.rotation.z += controlz.rotationSpeed;
 
     // render using requestAnimationFrame
     requestAnimationFrame(gameLoop);
