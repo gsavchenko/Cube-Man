@@ -154,7 +154,7 @@ function init() {
     scene.add(body);
     // add controls
     gui = new GUI();
-    control = new Control(0.05);
+    control = new Control(0.00);
     addControl(control);
     // Add framerate stats
     addStatsObject();

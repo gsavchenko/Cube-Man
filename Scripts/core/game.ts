@@ -192,7 +192,6 @@ function init() {
     window.addEventListener('resize', onResize, false);
 }
 
-
 function createCustomMesh() {
     customGeometry = new Geometry();
     customGeometry.vertices = vertices;
