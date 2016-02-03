@@ -1,0 +1,25 @@
+{
+  "name": "comp392-cube-man",
+  "authors": [
+    "George Savchenko <george.savchenko@gmail.com>"
+  ],
+  "description": "COMP392-ThreeJSBoilerPlate for Advanced Graphics",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "http://github.com/CentennialCollege/Cube-Man",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "Scripts/lib"
+  ],
+  "dependencies": {
+    "three.js": "threejs#*",
+    "dat-gui": "~0.5.1",
+    "stats.js": "*",
+    "threex.colliders": "*"
+  }
+}
