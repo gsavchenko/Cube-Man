@@ -18,5 +18,8 @@ module objects {
         constructor(rotationSpeed:number) {
            this.rotationSpeed = rotationSpeed;
         }
+        
+        //PUBLIC METHODS +++++++++++++++++++++++++++++++++++++++
+       
     }
 }

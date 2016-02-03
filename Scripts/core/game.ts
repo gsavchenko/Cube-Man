@@ -6,9 +6,9 @@ MAIN GAME FILE
 Source file	name:       game.ts
 Author’s name:	        George Savcheko
 Last modified by:       George Savchenko
-Date last modified:     2016-02-02
+Date last modified:     2016-02-03
 Program	description:    Display a cube like humanoid character
-Revision history:       basic body shape added
+Revision history:       Added functionality for rotation on one axis
 
 THREEJS Aliases
 */ 
@@ -191,6 +191,7 @@ function init() {
     
     window.addEventListener('resize', onResize, false);
 }
+
 
 function createCustomMesh() {
     customGeometry = new Geometry();
