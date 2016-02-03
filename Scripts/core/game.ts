@@ -7,8 +7,12 @@ Source file	name:       game.ts
 Author’s name:	        George Savcheko
 Last modified by:       George Savchenko
 Date last modified:     2016-02-03
-Program	description:    Display a cube like humanoid character
-Revision history:       added rotation on all axises
+Program	description:    Using	the	Three.js	JavaScript	Library	and	TypeScript,	create	a	web	application	that	displays	a	3D	
+                        Humanoid	Character.	The	Character	will	be	composed	of	primitive	Cube	Meshes	arranged	in	a	
+                        humanoid	shape.	On-Screen	Controls  will	allow	the	user	to	rotate	the	character	in	any	direction.	
+                        The	user	will	be	able	to	use	the	controls	to	change	the	colour	properties	of	Cube	Materials	
+                        (as	a	group).  
+Revision history:       added color changing to control panel
 
 THREEJS Aliases
 */ 
@@ -58,9 +62,7 @@ var plane: Mesh;
 var sphere: Mesh;
 var ambientLight: AmbientLight;
 var spotLight: SpotLight;
-var controlx: Control;
-var controly: Control;
-var controlz: Control;
+var control: Control;
 var gui: GUI;
 var stats: Stats;
 var step: number = 0;
@@ -78,12 +80,12 @@ function init() {
 	
     setupCamera(); // setup the camera
 	
-    // add an axis helper to the scene
+    // Add an axis helper to the scene
     axes = new AxisHelper(20);
     scene.add(axes);
     console.log("Added Axis Helper to scene...");
     
-    //Add a Plane to the Scene
+    // Add a Plane to the Scene (does not rotate with cube man)
     plane = new gameObject(
         new PlaneGeometry(60, 40, 1, 1),
         new LambertMaterial({ color: 0x66cd00 }),
@@ -107,14 +109,13 @@ function init() {
     scene.add(spotLight);
     console.log("Added a SpotLight Light to Scene");
     
-    // Make cube man    
-    // Body
+    // Make humanoid character composed of cubes of various sizes
+    // Body (all other parts are attached to this)
     cubeGeometry = new CubeGeometry(5, 6, 1);
     cubeMaterial = new LambertMaterial({color: 0xff4c4c});
     body = new Mesh(cubeGeometry, cubeMaterial);
     body.castShadow = true;
     body.receiveShadow = true;
-    body.position.x = 0;
     body.position.y = 14;    
     
     // Head
@@ -123,7 +124,6 @@ function init() {
     head = new Mesh(cubeGeometry, cubeMaterial);
     head.castShadow = true;
     head.receiveShadow = true;
-    head.position.x = 0;
     head.position.y = 4.5;
     body.add(head);   
     
@@ -153,7 +153,6 @@ function init() {
     lowerTorso = new Mesh(cubeGeometry, cubeMaterial);
     lowerTorso.castShadow = true;
     lowerTorso.receiveShadow = true;
-    lowerTorso.position.x = 0;
     lowerTorso.position.y = -3.5;
     body.add(lowerTorso);
     
@@ -179,14 +178,10 @@ function init() {
 
     scene.add(body);
         
-    // add controls
+    // Add controls using DAT.GUI to allow user to rotate cube man
     gui = new GUI();
-    controlx = new Control(0.00);
-    controly = new Control(0.00);
-    controlz = new Control(0.00);
-    addControl(controlx);
-    addControl(controly);
-    addControl(controlz);
+    control = new Control(0.00);
+    addControl(control);
 
     // Add framerate stats
     addStatsObject();
@@ -198,35 +193,18 @@ function init() {
     window.addEventListener('resize', onResize, false);
 }
 
-
-function createCustomMesh() {
-    customGeometry = new Geometry();
-    customGeometry.vertices = vertices;
-    customGeometry.faces = faces;
-    customGeometry.mergeVertices();
-    customGeometry.computeFaceNormals();
-
-    customMaterials = [
-        new LambertMaterial({ opacity: 0.6, color: 0x44ff44, transparent: true }),
-        new MeshBasicMaterial({ color: 0x000000, wireframe: true })
-    ];
-
-    customMesh = THREE.SceneUtils.createMultiMaterialObject(customGeometry, customMaterials);
-    customMesh.children.forEach((child) => {
-        child.castShadow = true;
-    });
-    customMesh.name = "customMesh";
-    scene.add(customMesh);
-}
-
 function onResize(): void {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// Add controls to control object to allow user to rotate cube man on any axis
 function addControl(controlObject: Control): void {
-    gui.add(controlObject, 'rotationSpeed',-0.5,0.5);
+    gui.add(controlObject, 'rotationSpeedx',-0.5,0.5);
+    gui.add(controlObject, 'rotationSpeedy',-0.5,0.5);
+    gui.add(controlObject, 'rotationSpeedz',-0.5,0.5);
+    gui.add(controlObject, 'changeColors');
 }
 
 function addStatsObject() {
@@ -241,10 +219,19 @@ function addStatsObject() {
 // Setup main game loop
 function gameLoop(): void {
     stats.update();
-
-    body.rotation.x += controlx.rotationSpeed;
-    body.rotation.y += controly.rotationSpeed;
-    body.rotation.z += controlz.rotationSpeed;
+    
+    //set body mesh to rotate based on control panel changes
+    body.rotation.x += control.rotationSpeedx;
+    body.rotation.y += control.rotationSpeedy;
+    body.rotation.z += control.rotationSpeedz;
+    
+    //set body material colours to different themes
+    body.material.color = control.shirtColour;
+    leftArm.material.color = control.shirtColour;
+    rightArm.material.color = control.shirtColour;
+    lowerTorso.material.color = control.pantsColour;
+    rightLeg.material.color = control.pantsColour;
+    leftLeg.material.color = control.pantsColour;
 
     // render using requestAnimationFrame
     requestAnimationFrame(gameLoop);
@@ -262,7 +249,7 @@ function setupRenderer(): void {
     console.log("Finished setting up Renderer...");
 }
 
-// Setup main camera for the scene
+// Setup main (perspective) camera for the scene
 function setupCamera(): void {
     camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.x = -25;
@@ -271,3 +258,5 @@ function setupCamera(): void {
     camera.lookAt(new Vector3(5, 0, 0));
     console.log("Finished setting up Camera...");
 }
+
+
