@@ -12,7 +12,7 @@ Program	description:    Using	the	Three.js	JavaScript	Library	and	TypeScript,	cr
                         humanoid	shape.	On-Screen	Controls  will	allow	the	user	to	rotate	the	character	in	any	direction.	
                         The	user	will	be	able	to	use	the	controls	to	change	the	colour	properties	of	Cube	Materials	
                         (as	a	group).  
-Revision history:       added color changing to control panel
+Revision history:       added shoes and textures
 
 THREEJS Aliases
 */ 
@@ -57,6 +57,8 @@ var lowerTorso;
 var body;
 var leftArm;
 var rightArm;
+var leftFoot;
+var rightFoot;
 var lamberMaterial;
 var plane: Mesh;
 var sphere: Mesh;
@@ -71,6 +73,7 @@ var faces: Face3[] = new Array<Face3>();
 var customGeometry: Geometry;
 var customMaterials: Material[] = new Array<Material>();
 var customMesh: Object3D;
+var texture = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('textures/texture.png') } );
 
 function init() {
     // Instantiate a new Scene object
@@ -157,24 +160,44 @@ function init() {
     body.add(lowerTorso);
     
     // Left leg
-    cubeGeometry = new CubeGeometry(1, 10, 1);
+    cubeGeometry = new CubeGeometry(1, 8.5, 1);
     cubeMaterial = new LambertMaterial({color: 0x113572});
     leftLeg = new Mesh(cubeGeometry, cubeMaterial);
     leftLeg.castShadow = true;
     leftLeg.receiveShadow = true;
     leftLeg.position.x = 2;
-    leftLeg.position.y = -8;
+    leftLeg.position.y = -7.5;
     body.add(leftLeg);
     
     // Right leg
-    cubeGeometry = new CubeGeometry(1, 10, 1);
+    cubeGeometry = new CubeGeometry(1, 8.5, 1);
     cubeMaterial = new LambertMaterial({color: 0x113572});
     rightLeg = new Mesh(cubeGeometry, cubeMaterial);
     rightLeg.castShadow = true;
     rightLeg.receiveShadow = true;
     rightLeg.position.x = -2;
-    rightLeg.position.y = -8;
-    body.add(rightLeg);    
+    rightLeg.position.y = -7.5;
+    body.add(rightLeg);
+    
+    // Left foot
+    cubeGeometry = new CubeGeometry(1, 1, 2);
+    leftFoot = new Mesh(cubeGeometry, texture);
+    leftFoot.castShadow = true;
+    leftFoot.receiveShadow = true;
+    leftFoot.position.x = 2;
+    leftFoot.position.z = 0.5;
+    leftFoot.position.y = -12;
+    body.add(leftFoot);
+    
+    // Right foot
+    cubeGeometry = new CubeGeometry(1, 1, 2);
+    rightFoot = new Mesh(cubeGeometry, texture);
+    rightFoot.castShadow = true;
+    rightFoot.receiveShadow = true;
+    rightFoot.position.x = -2;
+    rightFoot.position.z = 0.5;
+    rightFoot.position.y = -12;
+    body.add(rightFoot);  
 
     scene.add(body);
         

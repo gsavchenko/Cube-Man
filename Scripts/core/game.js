@@ -54,6 +54,8 @@ var lowerTorso;
 var body;
 var leftArm;
 var rightArm;
+var leftFoot;
+var rightFoot;
 var lamberMaterial;
 var plane;
 var sphere;
@@ -68,6 +70,7 @@ var faces = new Array();
 var customGeometry;
 var customMaterials = new Array();
 var customMesh;
+var texture = new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture('textures/texture.png') });
 function init() {
     // Instantiate a new Scene object
     scene = new Scene();
@@ -135,23 +138,41 @@ function init() {
     lowerTorso.position.y = -3.5;
     body.add(lowerTorso);
     // Left leg
-    cubeGeometry = new CubeGeometry(1, 10, 1);
+    cubeGeometry = new CubeGeometry(1, 8.5, 1);
     cubeMaterial = new LambertMaterial({ color: 0x113572 });
     leftLeg = new Mesh(cubeGeometry, cubeMaterial);
     leftLeg.castShadow = true;
     leftLeg.receiveShadow = true;
     leftLeg.position.x = 2;
-    leftLeg.position.y = -8;
+    leftLeg.position.y = -7.5;
     body.add(leftLeg);
     // Right leg
-    cubeGeometry = new CubeGeometry(1, 10, 1);
+    cubeGeometry = new CubeGeometry(1, 8.5, 1);
     cubeMaterial = new LambertMaterial({ color: 0x113572 });
     rightLeg = new Mesh(cubeGeometry, cubeMaterial);
     rightLeg.castShadow = true;
     rightLeg.receiveShadow = true;
     rightLeg.position.x = -2;
-    rightLeg.position.y = -8;
+    rightLeg.position.y = -7.5;
     body.add(rightLeg);
+    // Left foot
+    cubeGeometry = new CubeGeometry(1, 1, 2);
+    leftFoot = new Mesh(cubeGeometry, texture);
+    leftFoot.castShadow = true;
+    leftFoot.receiveShadow = true;
+    leftFoot.position.x = 2;
+    leftFoot.position.z = 0.5;
+    leftFoot.position.y = -12;
+    body.add(leftFoot);
+    // Right foot
+    cubeGeometry = new CubeGeometry(1, 1, 2);
+    rightFoot = new Mesh(cubeGeometry, texture);
+    rightFoot.castShadow = true;
+    rightFoot.receiveShadow = true;
+    rightFoot.position.x = -2;
+    rightFoot.position.z = 0.5;
+    rightFoot.position.y = -12;
+    body.add(rightFoot);
     scene.add(body);
     // Add controls using DAT.GUI to allow user to rotate cube man
     gui = new GUI();
